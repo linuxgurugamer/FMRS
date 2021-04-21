@@ -185,7 +185,7 @@ namespace FMRS
                 }
 
                 if (science > 0)
-                    message += "@Scienec Data: +" + science.ToString() + " Mbit@@";
+                    message += "@Science Data: +" + science.ToString() + " Mbit@@";
 
                 if (contract_mess != "")
                 {
