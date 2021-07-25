@@ -98,6 +98,8 @@
  using System.Reflection;
 
  [assembly: AssemblyVersion("<#= major #>.<#= minor #>.<#= patch #>.<#= build #>")]
+ [assembly: AssemblyFileVersion("<#= major #>.<#= minor #>.<#= patch #>.<#= build #>")]
+
   public partial class FMRS_Version_Info
   {
    public const string beta_version = "<#= build #>";
