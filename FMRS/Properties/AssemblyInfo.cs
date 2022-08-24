@@ -35,5 +35,5 @@ using System.Runtime.InteropServices;
 //[assembly: AssemblyVersion("1.0.2.7")]
 //[assembly: AssemblyFileVersion("1.0.2.0")]
 
-[assembly: KSPAssembly("SlingShotter", 1, 0)]
+//[assembly: KSPAssembly("FMRS", 1, 0)]
 [assembly: KSPAssemblyDependency("ToolbarController", 1, 0)]
