@@ -90,7 +90,8 @@ namespace FMRS
             GameEvents.onStageSeparation.Remove(staging_routine);
             if (HighLogic.CurrentGame.Parameters.CustomParams<FMRS_Settings>()._SETTING_Include_Undock)
                GameEvents.onUndock.Remove(staging_routine);
-            GameEvents.onLaunch.Remove(launch_routine);
+            if (onLaunchEnabled)
+                GameEvents.onLaunch.Remove(launch_routine);
             GameEvents.onCollision.Remove(crash_handler);
             GameEvents.onCrash.Remove(crash_handler);
             GameEvents.onCrashSplashdown.Remove(crash_handler);

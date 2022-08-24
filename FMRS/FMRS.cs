@@ -90,11 +90,11 @@ namespace FMRS
            
         }
 
-        
-/*************************************************************************************************************************/
+
+        /*************************************************************************************************************************/
+        bool onLaunchEnabled = false;
         void Start()
         {
-            //RenderingManager.AddToPostDrawQueue(3, new Callback(drawGUI));     
 #if DEBUG
             //if (Debug_Level_1_Active)
                 Log.PushStackInfo("FMRS.Start", "entering Start()");
@@ -111,6 +111,7 @@ namespace FMRS
                 
                 _SETTING_Enabled = true;
                 GameEvents.onLaunch.Add(launch_routine);
+                onLaunchEnabled = true;
             }
 
             if (_SETTING_Enabled)
@@ -191,6 +192,11 @@ namespace FMRS
             //if (Debug_Level_1_Active)
                 Log.PushStackInfo("FMRS.OnDestroy", "enter OnDestroy()");
 #endif
+            GameEvents.onShowUI.Remove(ShowUI);
+            GameEvents.onHideUI.Remove(HideUI);
+            if (onLaunchEnabled)
+                GameEvents.onLaunch.Remove(launch_routine);
+            onLaunchEnabled = false;
             destroy_FMRS();
 
             remove_toolbar_button();

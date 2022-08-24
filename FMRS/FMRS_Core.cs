@@ -435,6 +435,7 @@ namespace FMRS
 
 
         /*************************************************************************************************************************/
+        bool onLaunchEnabled  = false;
         public void toolbar_open()
         {
             bool arm_save = false;
@@ -460,6 +461,7 @@ namespace FMRS
                     Log.Info("start plugin on launchpad");
 #endif
                 GameEvents.onLaunch.Add(launch_routine);
+                onLaunchEnabled = true;
                 flight_scene_start_routine();
             }
             else if (FlightGlobals.ActiveVessel.Landed)
@@ -496,7 +498,12 @@ namespace FMRS
 #endif
         }
 
-
+        void OnDestroy()
+        {
+            if (onLaunchEnabled)
+                GameEvents.onLaunch.Add(launch_routine);
+            onLaunchEnabled = false;
+        }
         /*************************************************************************************************************************/
         public void close_FMRS()
         {
