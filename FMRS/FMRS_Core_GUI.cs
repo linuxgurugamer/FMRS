@@ -32,6 +32,7 @@ using System.Reflection;
 using UnityEngine;
 using KSP.IO;
 using Contracts;
+using KSP.Localization;
 
 using ClickThroughFix;
 
@@ -41,6 +42,29 @@ namespace FMRS
     {
         internal static String _AssemblyName { get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Name; } }
         int baseWindowID;
+
+        // Localization Strings
+        private static string Local_001 = Localizer.GetStringByTag("#FMRS_Local_001");
+        private static string Local_002 = Localizer.GetStringByTag("#FMRS_Local_002");
+        private static string Local_003 = Localizer.GetStringByTag("#FMRS_Local_003");
+        private static string Local_004 = Localizer.GetStringByTag("#FMRS_Local_004");
+        private static string Local_005 = Localizer.GetStringByTag("#FMRS_Local_005");
+        private static string Local_006 = Localizer.GetStringByTag("#FMRS_Local_006");
+        private static string Local_007 = Localizer.GetStringByTag("#FMRS_Local_007");
+        private static string Local_008 = Localizer.GetStringByTag("#FMRS_Local_008");
+        private static string Local_009 = Localizer.GetStringByTag("#FMRS_Local_009");
+        private static string Local_010 = Localizer.GetStringByTag("#FMRS_Local_010");
+        private static string Local_011 = Localizer.GetStringByTag("#FMRS_Local_011");
+        private static string Local_012 = Localizer.GetStringByTag("#FMRS_Local_012");
+        private static string Local_013 = Localizer.GetStringByTag("#FMRS_Local_013");
+        private static string Local_014 = Localizer.GetStringByTag("#FMRS_Local_014");
+
+        private static string Local_020 = Localizer.GetStringByTag("#FMRS_Local_020");
+
+        private static string Local_023 = Localizer.GetStringByTag("#FMRS_Local_023");
+        private static string Local_024 = Localizer.GetStringByTag("#FMRS_Local_024");
+        private static string Local_025 = Localizer.GetStringByTag("#FMRS_Local_025");
+        private static string Local_026 = Localizer.GetStringByTag("#FMRS_Local_026");
 
         /*************************************************************************************************************************/
         private void Start()
@@ -103,23 +127,23 @@ namespace FMRS
             if (!_SETTING_Minimize)
             {
                 if (_SAVE_Has_Launched)
-                    GUILayout.Box("Mission Time: " + get_time_string(Planetarium.GetUniversalTime() - _SAVE_Launched_At), text_main, GUILayout.Width(188));
+                    GUILayout.Box($"{Local_001}: " + get_time_string(Planetarium.GetUniversalTime() - _SAVE_Launched_At), text_main, GUILayout.Width(188)); // Mission Time
                 else
-                    GUILayout.Box("Mission Time: " + "00:00", text_main, GUILayout.Width(137));
+                    GUILayout.Box($"{Local_001}: " + "00:00", text_main, GUILayout.Width(137)); // Mission Time
             }
             else
                 GUILayout.Space(5);
 
             if (_SETTING_Armed)
-                temp_string = "Armed";
+                temp_string = Local_002;//"Armed"
             else
-                temp_string = "Arm";
+                temp_string = Local_003;//"Arm"
 
             if (!_SAVE_Has_Launched)
                 _SETTING_Armed = GUILayout.Toggle(_SETTING_Armed, temp_string, button_small, GUILayout.Width(50));
             else
                 if (_SETTING_Minimize)
-                GUILayout.Box("Flight", text_main, GUILayout.Width(50));
+                GUILayout.Box(Local_004, text_main, GUILayout.Width(50));//"Flight"
 
             if (!_SETTING_Minimize)
             {
@@ -148,15 +172,15 @@ namespace FMRS
                     GUILayout.Space(5);
                     window_height += 5;
 
-                    GUILayout.Box("Plugin will be reset!", text_heading, GUILayout.Width(266));
+                    GUILayout.Box(Local_005, text_heading, GUILayout.Width(266));//"Plugin will be reset!"
                     window_height += 29;
-                    GUILayout.Box("Close?", text_heading, GUILayout.Width(266));
+                    GUILayout.Box(Local_006, text_heading, GUILayout.Width(266));//"Close?"
                     GUILayout.BeginHorizontal();
 
-                    if (GUILayout.Button("YES", button_big, GUILayout.Width(132)))
+                    if (GUILayout.Button(Local_007, button_big, GUILayout.Width(132)))//"YES"
                         close_FMRS();
 
-                    if (GUILayout.Button("NO", button_big, GUILayout.Width(133)))
+                    if (GUILayout.Button(Local_008, button_big, GUILayout.Width(133)))//"NO"
                         really_close = false;
 
                     GUILayout.EndHorizontal();
@@ -172,17 +196,17 @@ namespace FMRS
                 window_height += 5;
                 GUILayout.BeginVertical( /* area_style ,*/ GUILayout.Width(266));
                 GUILayout.Space((5 * 30) + 5);
-                _SETTING_Messages = GUI.Toggle(new Rect(5, 35 + (30 * 1), 25, 25), _SETTING_Messages, "Messaging System");
+                _SETTING_Messages = GUI.Toggle(new Rect(5, 35 + (30 * 1), 25, 25), _SETTING_Messages, Local_009);//"Messaging System"
                 window_height += 30;
-                _SETTING_Auto_Cut_Off = GUI.Toggle(new Rect(5, 35 + (30 * 2), 25, 25), _SETTING_Auto_Cut_Off, "Auto Cut Off Engines");
+                _SETTING_Auto_Cut_Off = GUI.Toggle(new Rect(5, 35 + (30 * 2), 25, 25), _SETTING_Auto_Cut_Off, Local_010);//"Auto Cut Off Engines"
                 window_height += 30;
-                _SETTING_Auto_Recover = GUI.Toggle(new Rect(5, 35 + (30 * 3), 25, 25), _SETTING_Auto_Recover, "Auto Recover Landed Crafts");
+                _SETTING_Auto_Recover = GUI.Toggle(new Rect(5, 35 + (30 * 3), 25, 25), _SETTING_Auto_Recover, Local_011);//"Auto Recover Landed Crafts"
                 window_height += 30;
-                _SETTING_Throttle_Log = GUI.Toggle(new Rect(5, 35 + (30 * 4), 25, 25), _SETTING_Throttle_Log, "Throttle Logger WIP");
+                _SETTING_Throttle_Log = GUI.Toggle(new Rect(5, 35 + (30 * 4), 25, 25), _SETTING_Throttle_Log, Local_012);//"Throttle Logger WIP"
                 window_height += 30;
                 Timer_Stage_Delay = GUI.HorizontalSlider(new Rect(45, 35 + (30 * 6) + 15, 205, 25), Timer_Stage_Delay, 0.2f, 5.0f);
                 window_height += 45;
-                GUI.Label(new Rect(20, 35 + (30 * 7), 225, 25), "Stage Save Delay: " + Timer_Stage_Delay.ToString("F1"));
+                GUI.Label(new Rect(20, 35 + (30 * 7), 225, 25), $"{Local_013}: " + Timer_Stage_Delay.ToString("F1"));//Stage Save Delay
 
 #if DEBUG
                 window_height += 30;
@@ -199,7 +223,7 @@ namespace FMRS
                     GUILayout.Space(5);
                     window_height += 5;
 
-                    GUILayout.Box("Separated Stages:", text_heading, GUILayout.Width(266));
+                    GUILayout.Box($"{Local_014}:", text_heading, GUILayout.Width(266));//Separated Stages
                     window_height += 33;
 
                     foreach (KeyValuePair<Guid, string> temp_keyvalue in Vessels_dropped)
@@ -240,9 +264,9 @@ namespace FMRS
                         GUILayout.Space(5);
                         GUILayout.BeginVertical(); //  area_style);
                         if (save_files.Last().Contains("separated_"))
-                            GUILayout.Box("Separated at " + get_time_string(Convert.ToDouble(get_save_value(save_cat.SAVEFILE, save_files.Last())) - _SAVE_Launched_At), text_main, GUILayout.Width(230 + scrollbar_width_offset));
+                            GUILayout.Box(Localizer.Format("#FMRS_Local_015", get_time_string(Convert.ToDouble(get_save_value(save_cat.SAVEFILE, save_files.Last())) - _SAVE_Launched_At)), text_main, GUILayout.Width(230 + scrollbar_width_offset));//"Separated at " + get_time_string(Convert.ToDouble(get_save_value(save_cat.SAVEFILE, save_files.Last())) - _SAVE_Launched_At)
                         else
-                            GUILayout.Box("Stage " + save_files.Last().Substring(10) + " separated at " + get_time_string(Convert.ToDouble(get_save_value(save_cat.SAVEFILE, save_files.Last())) - _SAVE_Launched_At), text_main, GUILayout.Width(230 + scrollbar_width_offset));
+                            GUILayout.Box(Localizer.Format("#FMRS_Local_016", save_files.Last().Substring(10), get_time_string(Convert.ToDouble(get_save_value(save_cat.SAVEFILE, save_files.Last())) - _SAVE_Launched_At)), text_main, GUILayout.Width(230 + scrollbar_width_offset));//"Stage " + save_files.Last().Substring(10) + " separated at " + get_time_string(Convert.ToDouble(get_save_value(save_cat.SAVEFILE, save_files.Last())) - _SAVE_Launched_At)
 
                         foreach (KeyValuePair<Guid, string> vessel_in_savefile in Vessels_dropped)
                         {
@@ -254,11 +278,11 @@ namespace FMRS
                                 GUILayout.BeginHorizontal();
                                 if (get_vessel_state(vessel_in_savefile.Key) == vesselstate.RECOVERED)
                                 {
-                                    GUILayout.Box(Vessels_dropped_names[vessel_in_savefile.Key] + " recovered", text_cyan, GUILayout.Width(205 + scrollbar_width_offset));
+                                    GUILayout.Box(Localizer.Format("#FMRS_Local_017", Vessels_dropped_names[vessel_in_savefile.Key]), text_cyan, GUILayout.Width(205 + scrollbar_width_offset));//Vessels_dropped_names[vessel_in_savefile.Key] + " recovered"
                                 }
                                 else if (get_vessel_state(vessel_in_savefile.Key) == vesselstate.LANDED)
                                 {
-                                    GUILayout.Box(Vessels_dropped_names[vessel_in_savefile.Key] + " landed", text_green, GUILayout.Width(205 + scrollbar_width_offset));
+                                    GUILayout.Box(Localizer.Format("#FMRS_Local_018", Vessels_dropped_names[vessel_in_savefile.Key]), text_green, GUILayout.Width(205 + scrollbar_width_offset));//Vessels_dropped_names[vessel_in_savefile.Key] + " landed"
                                 }
                                 else if (vessel_in_savefile.Key == FlightGlobals.ActiveVessel.id || vessel_in_savefile.Key == anz_id)
                                 {
@@ -272,15 +296,15 @@ namespace FMRS
                                     }
                                     if (FlightGlobals.ActiveVessel.LandedOrSplashed)
                                     {
-                                        GUILayout.Box(Vessels_dropped_names[vessel_in_savefile.Key] + " landed", text_green, GUILayout.Width(temp_float));
+                                        GUILayout.Box(Localizer.Format("#FMRS_Local_018", Vessels_dropped_names[vessel_in_savefile.Key]), text_green, GUILayout.Width(temp_float));//Vessels_dropped_names[vessel_in_savefile.Key] + " landed"
                                     }
                                     else
                                     {
-                                        GUILayout.Box("contr.: " + Vessels_dropped_names[vessel_in_savefile.Key], text_yellow, GUILayout.Width(temp_float));
+                                        GUILayout.Box(Localizer.Format("#FMRS_Local_019", Vessels_dropped_names[vessel_in_savefile.Key]), text_yellow, GUILayout.Width(temp_float));//"contr.: " + Vessels_dropped_names[vessel_in_savefile.Key]
                                     }
                                     if (can_q_save_load)
                                     {
-                                        if (GUILayout.Button("Jump back to Separation", button_main, GUILayout.Width(222 + scrollbar_width_offset)))
+                                        if (GUILayout.Button(Local_020, button_main, GUILayout.Width(222 + scrollbar_width_offset)))//"Jump back to Separation"
                                             jump_to_vessel(vessel_in_savefile.Key, false);                                        
 
                                         GUILayout.EndVertical();
@@ -290,7 +314,7 @@ namespace FMRS
                                 }
                                 else if (get_vessel_state(vessel_in_savefile.Key) == vesselstate.DESTROYED)
                                 {
-                                    GUILayout.Box(Vessels_dropped_names[vessel_in_savefile.Key] + " destroyed", text_red, GUILayout.Width(205 + scrollbar_width_offset));
+                                    GUILayout.Box(Localizer.Format("#FMRS_Local_021", Vessels_dropped_names[vessel_in_savefile.Key]), text_red, GUILayout.Width(205 + scrollbar_width_offset));//Vessels_dropped_names[vessel_in_savefile.Key] + " destroyed"
                                 }
                                 else
                                 {
@@ -307,12 +331,12 @@ namespace FMRS
                                         {
                                             if (temp_vessel.LandedOrSplashed)
                                             {
-                                                if (GUILayout.Button(Vessels_dropped_names[vessel_in_savefile.Key] + " landed", button_green, GUILayout.Width(205 + scrollbar_width_offset)))
+                                                if (GUILayout.Button(Localizer.Format("#FMRS_Local_018", Vessels_dropped_names[vessel_in_savefile.Key]), button_green, GUILayout.Width(205 + scrollbar_width_offset)))//Vessels_dropped_names[vessel_in_savefile.Key] + " landed"
                                                     FlightGlobals.ForceSetActiveVessel(temp_vessel);
                                             }
                                             else
                                             {
-                                                if (GUILayout.Button(Vessels_dropped_names[vessel_in_savefile.Key] + " is near", button_yellow, GUILayout.Width(205 + scrollbar_width_offset)))
+                                                if (GUILayout.Button(Localizer.Format("#FMRS_Local_022", Vessels_dropped_names[vessel_in_savefile.Key]), button_yellow, GUILayout.Width(205 + scrollbar_width_offset)))//Vessels_dropped_names[vessel_in_savefile.Key] + " is near"
                                                     FlightGlobals.ForceSetActiveVessel(temp_vessel);
                                             }
                                         }
@@ -357,7 +381,7 @@ namespace FMRS
                     window_height += 5;
                     if (FMRS_SAVE_Util.Instance.jumpInProgress)
                         GUI.enabled = false;
-                    if (GUILayout.Button("Jump back to Main Mission", button_big, GUILayout.Width(266)))
+                    if (GUILayout.Button(Local_023, button_big, GUILayout.Width(266)))//"Jump back to Main Mission"
                     {
                         jump_to_vessel("Main");
                     }
@@ -373,16 +397,16 @@ namespace FMRS
                         GUI.enabled = false;
                     if (revert_to_launch)
                     {
-                        GUILayout.Box("Revert Flight?", text_heading, GUILayout.Width(266));
+                        GUILayout.Box(Local_024, text_heading, GUILayout.Width(266));//"Revert Flight?"
 
                         GUILayout.BeginHorizontal();
 
-                        if (GUILayout.Button("YES", button_big, GUILayout.Width(132)))
+                        if (GUILayout.Button(Local_007, button_big, GUILayout.Width(132)))//"YES"
                         {
                            // _SETTING_Enabled = false;
                             jump_to_vessel(_SAVE_Main_Vessel, "before_launch");
                         }
-                        if (GUILayout.Button("NO", button_big, GUILayout.Width(133)))
+                        if (GUILayout.Button(Local_008, button_big, GUILayout.Width(133)))//"NO"
                             revert_to_launch = false;
 
                         GUILayout.EndHorizontal();
@@ -391,9 +415,9 @@ namespace FMRS
                     else
                     {
                         if (_SAVE_Flight_Reset)
-                            revert_to_launch = GUILayout.Toggle(revert_to_launch, "Revert To Plugin Start", button_big, GUILayout.Width(266));
+                            revert_to_launch = GUILayout.Toggle(revert_to_launch, Local_025, button_big, GUILayout.Width(266));//"Revert To Plugin Start"
                         else
-                            revert_to_launch = GUILayout.Toggle(revert_to_launch, "Revert To Launch", button_big, GUILayout.Width(266));
+                            revert_to_launch = GUILayout.Toggle(revert_to_launch, Local_026, button_big, GUILayout.Width(266));//"Revert To Launch"
                         window_height += 31;
                     }
                     GUI.enabled = true;

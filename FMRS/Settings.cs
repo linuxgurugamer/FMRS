@@ -24,43 +24,43 @@ namespace FMRS
         public override bool HasPresets { get { return false; } }
 
 
-        [GameParameters.CustomParameterUI("FMRS Enabled")]
+        [GameParameters.CustomParameterUI("#FMRS_Local_027")]//FMRS Enabled
         public bool enabled = true;
 
-        [GameParameters.CustomParameterUI("Auto-Active at launch")]
+        [GameParameters.CustomParameterUI("#FMRS_Local_028")]//Auto-Active at launch
         public bool autoactiveAtLaunch = true;
 
-        [GameParameters.CustomParameterUI("Include Undocking events as staging events",
-            toolTip = "useful when staging isn't available (ie: after docking two ships, can't make the ports a stage)")]
+        [GameParameters.CustomParameterUI("#FMRS_Local_029",//Include Undocking events as staging events
+            toolTip = "#FMRS_Local_030")]//useful when staging isn't available (ie: after docking two ships, can't make the ports a stage)
         public bool _SETTING_Include_Undock = false;
 
 
-        [GameParameters.CustomFloatParameterUI("Stage Delay", minValue = 0.2f, maxValue = 5.0f, asPercentage = false, displayFormat = "0.0",
-                   toolTip = "How long after staging before saves are taken")]
+        [GameParameters.CustomFloatParameterUI("#FMRS_Local_031", minValue = 0.2f, maxValue = 5.0f, asPercentage = false, displayFormat = "0.0",
+                   toolTip = "#FMRS_Local_032")]//Stage Delay How long after staging before saves are taken
         public float Timer_Stage_Delay = 0.2f;
 
-        [GameParameters.CustomParameterUI("Messaging System")]
+        [GameParameters.CustomParameterUI("#FMRS_Local_033")]//Messaging System
         public bool _SETTING_Messages = true;
 
-        [GameParameters.CustomParameterUI("Auto Cut Off Engines")]
+        [GameParameters.CustomParameterUI("#FMRS_Local_034")]//Auto Cut Off Engines
         public bool _SETTING_Auto_Cut_Off = true;
 
-        [GameParameters.CustomParameterUI("Auto Recover Landed Crafts")]
+        [GameParameters.CustomParameterUI("#FMRS_Local_035")]//Auto Recover Landed Crafts
         public bool _SETTING_Auto_Recover = true;
 
-        [GameParameters.CustomParameterUI("Throttle Logger WIP")]
+        [GameParameters.CustomParameterUI("#FMRS_Local_036")]//Throttle Logger WIP
         public bool _SETTING_Throttle_Log = true;
 
-        [GameParameters.CustomParameterUI("Parachutes are controllable",
-            toolTip = "If enabled, any stage with a parachute will be treated as controllable by the mod")]
+        [GameParameters.CustomParameterUI("#FMRS_Local_037", // Parachutes are controllable
+            toolTip = "#FMRS_Local_038")]//If enabled, any stage with a parachute will be treated as controllable by the mod
         public bool _SETTING_Parachutes = true;
 
-        [GameParameters.CustomParameterUI("Defer parachute-only stages to Stage-Recovery (if installed)",
-            toolTip = "If Stage Recovery is installed, do not control stages which only have parachutes.  Note that using RecoveryController to specify a mod to control the stage will override this.")]
+        [GameParameters.CustomParameterUI("#FMRS_Local_039",//Defer parachute-only stages to Stage-Recovery (if installed)
+            toolTip = "#FMRS_Local_040")]//If Stage Recovery is installed, do not control stages which only have parachutes.  Note that using RecoveryController to specify a mod to control the stage will override this.
         public bool _SETTING_Defer_Parachutes_to_StageRecovery = true;
 
-        [GameParameters.CustomParameterUI("Uncontrolled stages are controllable",
-           toolTip = "Ignored if RecoveryController is active.  If enabled, any stage will be treated as controllable by the mod, even if you have no control over it.")]
+        [GameParameters.CustomParameterUI("#FMRS_Local_041",//Uncontrolled stages are controllable
+           toolTip = "#FMRS_Local_042")]//Ignored if RecoveryController is active.  If enabled, any stage will be treated as controllable by the mod, even if you have no control over it.
         public bool _SETTING_Control_Uncontrollable = false;
 
 
