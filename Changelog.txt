@@ -131,3 +131,8 @@ ChangeLog
 
 1.2.9.4
 	Updated version file
+
+1.2.9.5
+	Thanks to github user @tinygrox for this:
+		Added localication support
+		Added zh-cn.cfg for chinese
