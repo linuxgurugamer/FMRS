@@ -1,6 +1,6 @@
 {
   "NAME": "FMRS (Flight Manager For Reusable Stages)",
-  "URL": "http://ksp.spacetux.net/avc/FMRS",
+  "URL": "https://raw.githubusercontent.com/linuxgurugamer/FMRS/refs/heads/master/FMRS.version",
   "DOWNLOAD": "https://github.com/linuxgurugamer/FMRS/releases",
   "GITHUB": {
     "USERNAME": "linuxgurugamer",
@@ -10,7 +10,7 @@
     "MAJOR": 1,
     "MINOR": 2,
     "PATCH": 9,
-    "BUILD": 5
+    "BUILD": 6
   },
   "KSP_VERSION": {
     "MAJOR": 1,
@@ -25,6 +25,6 @@
   "KSP_VERSION_MAX": {
     "MAJOR": 1,
     "MINOR": 12,
-    "PATCH": 9
+    "PATCH": 99
   }
 }

@@ -136,3 +136,6 @@ ChangeLog
 	Thanks to github user @tinygrox for this:
 		Added localication support
 		Added zh-cn.cfg for chinese
+
+1.2.9.6
+	Updated version file to use github for new version info
