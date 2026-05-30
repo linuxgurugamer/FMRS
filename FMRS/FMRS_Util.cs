@@ -358,44 +358,31 @@ namespace FMRS
 /*************************************************************************************************************************/
         public string get_time_string(double dtime)
         {
-            Int16 s, min, ds;
-            Int32 time;
+            // Guard against inputs that overflow the Int32 conversion below.
+            // dtime is supplied by callers as elapsed game seconds, typically
+            // (Planetarium.GetUniversalTime() - _SAVE_Launched_At). For
+            // sufficiently long missions, or under heavy time warp (100,000x
+            // and above), this delta exceeds Int32.MaxValue / 100 (~21.47M
+            // seconds, ~248 game-days). The previous Convert.ToInt32(dtime *
+            // 100) then threw OverflowException, and because this method is
+            // called from FMRS_Core.MainGUI on every GUI frame, the same
+            // exception was logged at ~60 Hz, producing very large Player.log
+            // files and visible frame-time stutters at high warp.
+            if (double.IsNaN(dtime) || double.IsInfinity(dtime) || dtime < 0)
+                return "00:00.0";
+
+            // Use long throughout so the multiply-by-100 is safe for any
+            // realistically representable mission time. Replace the original
+            // O(N) while-loop decomposition with O(1) integer division so
+            // very large dtime values do not also burn CPU on the GUI thread.
+            long time = (long)(dtime * 100);   // deciseconds
+
+            long min = time / 6000;
+            long rem = time % 6000;
+            long s = rem / 100;
+            long ds = (rem % 100) / 10;
+
             string return_string;
-
-            dtime *= 100;
-
-            time = Convert.ToInt32(dtime);
-
-            s = 0;
-            ds = 0;
-            min = 0;
-
-            if (time >= 6000)
-            {
-                while (time >= 6000)
-                {
-                    min++;
-                    time -= 6000;
-                }
-            }
-
-            if (time >= 100)
-            {
-                while (time >= 100)
-                {
-                    s++;
-                    time -= 100;
-                }
-            }
-
-            if (time >= 10)
-            {
-                while (time >= 10)
-                {
-                    ds++;
-                    time -= 10;
-                }
-            }
 
             if (min < 10)
                 return_string = "0" + min.ToString();
