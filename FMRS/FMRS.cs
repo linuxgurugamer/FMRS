@@ -350,8 +350,8 @@ namespace FMRS
                     _SAVE_Kick_To_Main = false;
                     write_save_values_to_file();
 
-                    savegame = GamePersistence.LoadGame("FMRS_main_save", HighLogic.SaveFolder, false, false);
-                    temp_proto = savegame.flightState.protoVessels.Find(p => p.vesselID == _SAVE_Main_Vessel);
+                    savegame = load_snapshot(main_save_name, fmrs_folder(HighLogic.SaveFolder));
+                    temp_proto = savegame?.flightState.protoVessels.Find(p => p.vesselID == _SAVE_Main_Vessel);
 
                     if (temp_proto != null)
                     {
@@ -448,8 +448,8 @@ namespace FMRS
                     _SAVE_Kick_To_Main = false;
                     write_save_values_to_file();
 
-                    savegame = GamePersistence.LoadGame("FMRS_main_save", HighLogic.SaveFolder, false, false);
-                    temp_proto = savegame.flightState.protoVessels.Find(p => p.vesselID == _SAVE_Main_Vessel);
+                    savegame = load_snapshot(main_save_name, fmrs_folder(HighLogic.SaveFolder));
+                    temp_proto = savegame?.flightState.protoVessels.Find(p => p.vesselID == _SAVE_Main_Vessel);
 
                     if (temp_proto != null)
                     {
@@ -523,9 +523,11 @@ namespace FMRS
             if(_SAVE_Switched_To_Dropped)
             {
                 Log.Info("FMRS_MainMenu _SAVE_Switched_To_Dropped");
-                Game loadgame = GamePersistence.LoadGame("FMRS_main_save", _SAVE_SaveFolder, false, false);
+                move_legacy_main_save(_SAVE_SaveFolder);
+                Game loadgame = load_snapshot(main_save_name, fmrs_folder(_SAVE_SaveFolder));
                 // GamePersistence.SaveGame(loadgame, "persistent", _SAVE_SaveFolder, SaveMode.OVERWRITE);
-                FMRS_SAVE_Util.Instance.SaveGame("FMRS.Start", loadgame, "persistent", _SAVE_SaveFolder, SaveMode.OVERWRITE);
+                if (loadgame != null)
+                    FMRS_SAVE_Util.Instance.SaveGame("FMRS.Start", loadgame, "persistent", _SAVE_SaveFolder, SaveMode.OVERWRITE);
                 _SAVE_Switched_To_Dropped = false;
             }
 

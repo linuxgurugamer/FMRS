@@ -30,6 +30,8 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using KSP.IO;
+using KSP.Localization;
+using Contracts;
 
 namespace FMRS
 {
@@ -154,6 +156,7 @@ namespace FMRS
     {
         private string mod_version;
         public const string gamesave_name = "FMRS_save_";
+        public const string main_save_name = "FMRS_main_save";
 
         public struct recover_value
         {
@@ -206,6 +209,83 @@ namespace FMRS
         {
 
 
+        }
+
+
+/*************************************************************************************************************************/
+        // keeps snapshots out of KSP's Load Game list
+        public static string fmrs_folder(string save_folder)
+        {
+            return save_folder + "/FMRS";
+        }
+
+
+/*************************************************************************************************************************/
+        // older versions saved FMRS_main_save in the save's root folder
+        public static void move_legacy_main_save(string save_folder)
+        {
+            if (string.IsNullOrEmpty(save_folder))
+                return;
+
+            string root_path = KSPUtil.ApplicationRootPath + "saves/" + save_folder + "/";
+            string fmrs_path = KSPUtil.ApplicationRootPath + "saves/" + fmrs_folder(save_folder) + "/";
+
+            foreach (string extension in new string[] { ".sfs", ".loadmeta" })
+            {
+                string legacy_file = root_path + main_save_name + extension;
+                string new_file = fmrs_path + main_save_name + extension;
+                try
+                {
+                    if (!System.IO.File.Exists(legacy_file))
+                        continue;
+
+                    System.IO.Directory.CreateDirectory(fmrs_path);
+                    if (System.IO.File.Exists(new_file))
+                    {
+                        System.IO.File.Delete(legacy_file);
+                        Log.Warning("removed outdated " + legacy_file);
+                    }
+                    else
+                    {
+                        System.IO.File.Move(legacy_file, new_file);
+                        Log.Warning("moved " + legacy_file + " to " + fmrs_path);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Exception(e);
+                }
+            }
+        }
+
+
+/*************************************************************************************************************************/
+        // ContractSystem and StrategySystem load one frame after OnLoad, saving before that writes them empty
+        public static bool career_state_loaded()
+        {
+            if (HighLogic.CurrentGame == null || HighLogic.CurrentGame.Mode != Game.Modes.CAREER)
+                return true;
+            // timeout in case the load never finishes
+            return ContractSystem.loaded || Time.timeSinceLevelLoad > 10;
+        }
+
+
+/*************************************************************************************************************************/
+        // refuses snapshots saved before ContractSystem had loaded, they would wipe contracts and leaders
+        public static Game load_snapshot(string save_file, string save_folder)
+        {
+            Game game = GamePersistence.LoadGame(save_file, save_folder, false, false);
+            if (game == null)
+                return null;
+
+            ProtoScenarioModule contract_system = game.scenarios.Find(s => s.moduleName == "ContractSystem");
+            if (contract_system != null && contract_system.GetData().GetValue("version") == "-1")
+            {
+                Log.Warning("refusing to load " + save_folder + "/" + save_file + ": its ContractSystem was saved before it had loaded");
+                ScreenMessages.PostScreenMessage(Localizer.Format("#FMRS_Local_043", save_file), 15f, ScreenMessageStyle.UPPER_CENTER);
+                return null;
+            }
+            return game;
         }
     public void set_save_value(save_cat cat, string key, string value)
         {

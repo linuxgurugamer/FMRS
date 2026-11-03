@@ -66,7 +66,12 @@ namespace FMRS
             //GamePersistence.SaveGame("FMRS_quicksave", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
             FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.save_landed_vessel", "FMRS_quicksave", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
             loadgame = GamePersistence.LoadGame("FMRS_quicksave", HighLogic.SaveFolder + "/FMRS", false, false);
-            savegame = GamePersistence.LoadGame("FMRS_main_save", HighLogic.SaveFolder, false, false);
+            savegame = load_snapshot(main_save_name, fmrs_folder(HighLogic.SaveFolder));
+            if (savegame == null)
+            {
+                Log.Warning("save_landed_vessel: no usable " + main_save_name + ", landed vessels not saved");
+                return;
+            }
 
             foreach (Guid id in loaded_vessels)
             {
@@ -232,7 +237,7 @@ namespace FMRS
             }
 
             //GamePersistence.SaveGame(savegame, "FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
-            FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.save_landed_vessel", savegame, "FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
+            FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.save_landed_vessel", savegame, main_save_name, fmrs_folder(HighLogic.SaveFolder), SaveMode.OVERWRITE);
 
             write_recover_file();
             write_save_values_to_file();
@@ -430,18 +435,21 @@ namespace FMRS
 
             if (Debug_Active)  Log.Info("Jump to " + vessel_id.ToString());
 #endif
+            // would save the main vessel before contracts have loaded
+            if (!career_state_loaded())
+                return;
 
             if (save_landed)
             {
                 if (FlightGlobals.ActiveVessel.id == _SAVE_Main_Vessel)
                 {
                     //GamePersistence.SaveGame("FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
-                    FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.jump_to_vessel(Guid, bool)", "FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
+                    FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.jump_to_vessel(Guid, bool)", main_save_name, fmrs_folder(HighLogic.SaveFolder), SaveMode.OVERWRITE);
                 }
                 save_landed_vessel(true, false);
             }
 
-            Game loadgame = GamePersistence.LoadGame(get_save_value(save_cat.DROPPED, vessel_id.ToString()), HighLogic.SaveFolder + "/FMRS", false, false);
+            Game loadgame = load_snapshot(get_save_value(save_cat.DROPPED, vessel_id.ToString()), fmrs_folder(HighLogic.SaveFolder));
 
             if (loadgame != null && loadgame.compatible && loadgame.flightState != null)
             {
@@ -506,7 +514,7 @@ namespace FMRS
 
             save_landed_vessel(true, false);
 
-            loadgame = GamePersistence.LoadGame("FMRS_main_save", HighLogic.SaveFolder, false, false);
+            loadgame = load_snapshot(main_save_name, fmrs_folder(HighLogic.SaveFolder));
 
             if (loadgame != null && loadgame.compatible && loadgame.flightState != null)
             {
@@ -520,7 +528,7 @@ namespace FMRS
 #if DEBUG
                     if (Debug_Active) Log.Info("FMRS_main_save found, main vessel found, try to load");
 #endif
-                    _SAVE_Switched_To_Savefile = "FMRS_main_save";
+                    _SAVE_Switched_To_Savefile = main_save_name;
                     _SAVE_Switched_To_Dropped = false;
                     FMRS_SAVE_Util.Instance.StartAndFocusVessel(loadgame, load_vessel);
 //                    FlightDriver.StartAndFocusVessel(loadgame, load_vessel);
@@ -550,7 +558,7 @@ namespace FMRS
                 Log.PushStackInfo("FMRS_Core.jump_to_vessel(Guid, string)", "entering jump_to_vessel(string vessel_id,string save_file " + vessel_id.ToString() + " " + save_file);
             if (Debug_Active)  Log.Info("Jump to " + save_file);
 #endif
-            loadgame = GamePersistence.LoadGame(save_file, HighLogic.SaveFolder + "/FMRS", false, false);
+            loadgame = load_snapshot(save_file, fmrs_folder(HighLogic.SaveFolder));
 
             if (loadgame != null && loadgame.compatible && loadgame.flightState != null)
             {
