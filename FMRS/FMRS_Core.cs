@@ -121,6 +121,9 @@ namespace FMRS
             init_Save_File_Content();
             load_save_file();
 
+            if (HighLogic.CurrentGame != null)
+                move_legacy_main_save(HighLogic.SaveFolder);
+
 #if DEBUG
             //if (Debug_Level_1_Active)
             Log.PopStackInfo("leaving FMRS_core_awake()");
@@ -329,7 +332,7 @@ namespace FMRS
                         }
                     }
 
-                    if ((Time_Trigger_Staging + Timer_Stage_Delay) <= Planetarium.GetUniversalTime())
+                    if ((Time_Trigger_Staging + Timer_Stage_Delay) <= Planetarium.GetUniversalTime() && career_state_loaded())
                     {
 #if DEBUG
                         if (Debug_Active)
@@ -362,7 +365,7 @@ namespace FMRS
                         if (search_for_new_vessels(quicksave_file_name))
                         {
                             // GamePersistence.SaveGame(quicksave_file_name, HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
-                            FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.flight_scene_update_routine", quicksave_file_name, HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
+                            FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.flight_scene_update_routine", quicksave_file_name, fmrs_folder(HighLogic.SaveFolder), SaveMode.OVERWRITE);
 
                             if (_SAVE_Main_Vessel != FlightGlobals.ActiveVessel.id && !_SAVE_Switched_To_Dropped)
                                 main_vessel_changed(quicksave_file_name);
@@ -396,8 +399,13 @@ namespace FMRS
             while (!FlightGlobals.ActiveVessel.protoVessel.wasControllable)
                 yield return 0;
 
-            FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.save_game_pre_flight", "before_launch", HighLogic.SaveFolder + "/FMRS", SaveMode.OVERWRITE);
-            FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.save_game_pre_flight", "FMRS_main_save", HighLogic.SaveFolder, SaveMode.OVERWRITE);
+            while (!career_state_loaded())
+                yield return 0;
+            // one more frame for StrategySystem
+            yield return 0;
+
+            FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.save_game_pre_flight", "before_launch", fmrs_folder(HighLogic.SaveFolder), SaveMode.OVERWRITE);
+            FMRS_SAVE_Util.Instance.SaveGame("FMRS_Core.save_game_pre_flight", main_save_name, fmrs_folder(HighLogic.SaveFolder), SaveMode.OVERWRITE);
         }
 
 
